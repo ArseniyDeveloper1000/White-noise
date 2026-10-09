@@ -1,0 +1,56 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "diagNostic",
+            "request": "launch",
+            "mainClass": "mainCode.diagNostic",
+            "projectName": "beliiShoom_12b5c2f2"
+        },
+        {
+            "type": "java",
+            "name": "clientJavaBeta",
+            "request": "launch",
+            "mainClass": "mainCode.clientJavaBeta",
+            "projectName": "beliiShoom_12b5c2f2"
+        },
+        {
+            "type": "java",
+            "name": "serverJavaBeta",
+            "request": "launch",
+            "mainClass": "mainCode.serverJavaBeta",
+            "projectName": "beliiShoom_12b5c2f2"
+        },
+        {
+            "type": "java",
+            "name": "diagNostic",
+            "request": "launch",
+            "mainClass": "diagNostic",
+            "projectName": "beliiShoom_12b5c2f2"
+        },
+        {
+            "type": "java",
+            "name": "clientJavaBeta",
+            "request": "launch",
+            "mainClass": "clientJavaBeta",
+            "projectName": "beliiShoom_12b5c2f2"
+        },
+        {
+            "type": "java",
+            "name": "serverJavaBeta",
+            "request": "launch",
+            "mainClass": "serverJavaBeta",
+            "projectName": "beliiShoom_12b5c2f2"
+        },
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        }
+    ]
+}

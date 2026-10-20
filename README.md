@@ -1,4 +1,17 @@
 ## Getting Started
+<details>
+<summary>Нажмите, чтобы посмотреть отчеты по проекту</summary>
+
+Здесь может быть любой Markdown: заголовки, списки, таблицы, код.
+
+### Отчет №1
+- Ссылка на файл
+- Краткое описание
+
+### Отчет №2
+- ...
+
+</details>
 
 Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
 

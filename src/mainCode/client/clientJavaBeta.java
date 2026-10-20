@@ -115,8 +115,9 @@
 //     }
 // }
 /*
-java --enable-native-access=ALL-UNNAMED -cp "lib\*;src\main\java" clientJavaBeta
+java --enable-native-access=ALL-UNNAMED -cp "lib\*;src\mainCode\client" clientJavaBeta
 javac -cp "lib\*" src\main\java\clientJavaBeta.java
+arseni darov
 */
 
 package mainCode.client;

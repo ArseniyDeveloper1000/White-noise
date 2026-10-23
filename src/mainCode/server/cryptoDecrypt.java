@@ -25,7 +25,20 @@ public class cryptoDecrypt {
         this.ALGORITHM = algo;
     }
 
+    
     public byte[] decrypt(byte[] encryptedData) throws Exception {
+        if (encryptedData == null) {
+            throw new IllegalArgumentException(
+                "Нельзя расшифровать данные: массив равен null"
+            );
+        }
+
+        if (encryptedData.length == 0) {
+            throw new IllegalArgumentException(
+                "Нельзя расшифровать данные: массив пуст"
+            );
+        }
+
         switch (ALGORITHM) {
             case "AES-GCM":
                 return decryptAesGcm(encryptedData);
@@ -42,9 +55,12 @@ public class cryptoDecrypt {
             case "MAGMA-CTR":
                 return decryptMagmaCtr(encryptedData);
             default:
-                throw new IllegalArgumentException("Неизвестный алгоритм: " + ALGORITHM);
+                throw new IllegalArgumentException(
+                    "Неизвестный алгоритм: " + ALGORITHM
+                );
         }
     }
+
 
     // AES-GCM
     private static byte[] decryptAesGcm(byte[] data) throws Exception {

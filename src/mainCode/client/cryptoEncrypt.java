@@ -26,7 +26,20 @@ public class cryptoEncrypt {
         this.ALGORITHM = algo;
     }
 
+    
     public byte[] encrypt(byte[] data) throws Exception {
+        if (data == null) {
+            throw new IllegalArgumentException(
+                "Нельзя зашифровать данные: массив равен null"
+            );
+        }
+
+        if (data.length == 0) {
+            throw new IllegalArgumentException(
+                "Нельзя зашифровать данные: массив пуст"
+            );
+        }
+
         switch (ALGORITHM) {
             case "AES-GCM":
                 return encryptAesGcm(data);
@@ -43,9 +56,12 @@ public class cryptoEncrypt {
             case "MAGMA-CTR":
                 return encryptMagmaCtr(data);
             default:
-                throw new IllegalArgumentException("Неизвестный алгоритм: " + ALGORITHM);
+                throw new IllegalArgumentException(
+                    "Неизвестный алгоритм: " + ALGORITHM
+                );
         }
     }
+
 
     private static byte[] combineIvAndData(byte[] iv, byte[] encrypted) {
         byte[] result = new byte[iv.length + encrypted.length];

@@ -9,13 +9,30 @@ import javax.imageio.ImageIO;
 
 
 public class imageCompress {
-
-
+    
     public static byte[] compress(BufferedImage image) throws IOException {
+        if (image == null) {
+            throw new IllegalArgumentException(
+                "Нельзя сжать изображение: изображение равно null"
+            );
+        }
+
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(image, "jpg", baos);
-        byte[] compressedBytes = baos.toByteArray();
-        return compressedBytes;
+
+        try {
+            boolean written = ImageIO.write(image, "jpg", baos);
+
+            if (!written) {
+                throw new IOException(
+                    "Не удалось сжать изображение: JPEG-формат недоступен"
+                );
+            }
+
+            return baos.toByteArray();
+        } finally {
+            baos.close();
+        }
     }
+
     
 }

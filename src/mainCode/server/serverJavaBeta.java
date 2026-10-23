@@ -95,6 +95,9 @@
 /*
 java --enable-native-access=ALL-UNNAMED -cp "lib\*;src\main\java" serverJavaBeta
 javac -cp "lib\*" src\main\java\serverJavaBeta.java
+
+for AtemixBoom:
+java -cp "bin;lib/*" mainCode.server.serverJavaBeta
 */
 package mainCode.server;
 
@@ -134,10 +137,28 @@ public class serverJavaBeta {
             
             receivedCount++;
             
-            ByteBuffer data = ByteBuffer.wrap(packet.getData(), 0, packet.getLength());
+            if (packet.getLength() < 16) {
+                System.err.println(
+                    "Получен слишком короткий пакет: " + packet.getLength() + " байт"
+                );
+                continue;
+            }
+
+            ByteBuffer data = ByteBuffer.wrap(
+                packet.getData(), 0, packet.getLength()
+            );
+
             int frameId = data.getInt();
             int length = data.getInt();
-            long clientCaptureTime = data.getLong(); // Получаем время захвата с клиента
+            long clientCaptureTime = data.getLong();
+
+            if (length < 0 || length != packet.getLength() - 16) {
+                System.err.println(
+                    "Некорректная длина зашифрованных данных в кадре " + frameId
+                );
+                continue;
+            }
+
             
             // Подсчет потерь
             if (frameId != expectedFrameId && expectedFrameId != 0) {
@@ -149,11 +170,20 @@ public class serverJavaBeta {
             byte[] encryptedBytes = new byte[length];
             System.arraycopy(packet.getData(), 16, encryptedBytes, 0, length);
             
+            
             byte[] compressedBytes;
+
             try {
                 compressedBytes = decrypter.decrypt(encryptedBytes);
+            } catch (IllegalArgumentException e) {
+                System.err.println(
+                    "Некорректные данные кадра " + frameId + ": " + e.getMessage()
+                );
+                continue;
             } catch (Exception e) {
-                System.err.println("Ошибка дешифровки кадра " + frameId + ": " + e.getMessage());
+                System.err.println(
+                    "Ошибка дешифровки кадра " + frameId + ": " + e.getMessage()
+                );
                 continue;
             }
             

@@ -1,9 +1,9 @@
 package mainCode.diagnostic;
 
 import mainCode.client.cryptoEncrypt;
-import mainCode.server.imageDecompress;
 import mainCode.server.cryptoDecrypt;
 import mainCode.client.imageCompress;
+import mainCode.server.imageDecompress;
 import org.bytedeco.javacv.FFmpegFrameGrabber;
 import org.bytedeco.javacv.Java2DFrameConverter;
 import org.bytedeco.javacv.Frame;
@@ -20,29 +20,27 @@ public class videoCompressionDiagnostic {
     };
     
     private static final String SOURCE_VIDEO = "images/source.mp4"; 
-    
     private static final String[] VIDEO_FILES = {
         "test_320x240.mp4", "test_640x480.mp4", "test_960x720.mp4", "test_1280x720.mp4"
     };
-    
     private static final int[][] RESOLUTIONS = {
         {320, 240}, {640, 480}, {960, 720}, {1280, 720}
     };
-
     private static final int WARMUP_FRAMES = 10;
 
     public static void main(String[] args) {
         System.out.println("🚀 Шаг 1: Подготовка видеофайлов...");
         prepareVideos();
         
-        System.out.println("\n Шаг 2: Диагностика пайплайна на реальном видео\n");
+        System.out.println("\n🚀 Шаг 2: Диагностика пайплайна на реальном видео\n");
         File resultsDir = new File("results");
         if (!resultsDir.exists()) resultsDir.mkdirs();
         
         String csvPath = "results/video_pipeline_separated.csv";
 
         try (PrintWriter csvWriter = new PrintWriter(new FileWriter(csvPath))) {
-            csvWriter.println("Algorithm;VideoFile;Resolution;TotalFrames;OriginalSize_Bytes;Avg_CompressedSize_Bytes;Compression_Ratio_Percent;Avg_ClientTime_Ms;Avg_ServerTime_Ms");
+            // 9 КОЛОНОК: добавили OriginalSize_Bytes обратно
+            csvWriter.println("Algorithm;VideoFile;Resolution;TotalFrames;OriginalSize_Bytes;Compression_Ratio_Percent;Avg_ClientTime_Ms;Avg_ServerTime_Ms");
 
             for (String algo : ALGORITHMS) {
                 System.out.println("=".repeat(70));
@@ -79,8 +77,7 @@ public class videoCompressionDiagnostic {
                     Process p = pb.start();
                     p.waitFor();
                 } catch (Exception e) {
-                    System.err.println("❌ Ошибка FFmpeg. Убедитесь, что ffmpeg установлен и добавлен в PATH.");
-                    e.printStackTrace();
+                    System.err.println("❌ Ошибка FFmpeg.");
                 }
             }
         }
@@ -105,7 +102,6 @@ public class videoCompressionDiagnostic {
         System.out.printf("   🎥 %-20s | %dx%d | Сырой кадр: %d КБ%n", 
             videoFile, width, height, originalSizeBytes / 1024);
 
-        // ПРОГРЕВ
         long checksum = 0;
         for (int i = 0; i < WARMUP_FRAMES; i++) {
             Frame frame = grabber.grabImage();
@@ -119,7 +115,6 @@ public class videoCompressionDiagnostic {
         }
         grabber.setFrameNumber(0);
 
-        // ОСНОВНОЙ ТЕСТ
         int frameCount = 0;
         long totalClientTimeNs = 0;
         long totalServerTimeNs = 0;
@@ -157,6 +152,7 @@ public class videoCompressionDiagnostic {
             System.out.printf("      ✅ Кадров: %-4d | Сжатие: %5.1f%% | Клиент: %-6.3f мс | Сервер: %-6.3f мс%n",
                 frameCount, compressionRatioPercent, avgClientMs, avgServerMs);
 
+            // 9 АРГУМЕНТОВ для 9 спецификаторов
             csvWriter.printf("%s;%s;%dx%d;%d;%d;%.2f;%.4f;%.4f%n",
                 algorithm, videoFile, width, height, frameCount, 
                 originalSizeBytes, compressionRatioPercent, avgClientMs, avgServerMs);

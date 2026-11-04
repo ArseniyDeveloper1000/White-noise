@@ -267,9 +267,16 @@ public class videoMemoryDiagnostic {
                 csvWriter.flush();
             }
 
-        } finally {
-            grabber.stop();
-            grabber.release();
+        } 
+        
+        finally {
+            try {
+                grabber.stop();
+            } 
+            finally {
+                grabber.release();
+            }
+            
         }
     }
 }
